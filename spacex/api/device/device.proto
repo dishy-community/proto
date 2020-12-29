@@ -1,0 +1,143 @@
+syntax = "proto3";
+package SpaceX.API.Device;
+option go_package = "spacex.com/api/device";
+import "spacex/api/common/status/status.proto";
+import "spacex/api/device/command.proto";
+import "spacex/api/device/common.proto";
+import "spacex/api/device/dish.proto";
+import "spacex/api/device/wifi.proto";
+
+message ToDevice {
+	.SpaceX.API.Device.Request request = 1;
+}
+
+message FromDevice {
+	.SpaceX.API.Device.Response response = 1;
+	.SpaceX.API.Device.Event event = 2;
+}
+
+message Request {
+	uint64 id = 1;
+	string target_id = 13;
+	uint64 epoch_id = 14;
+	.SpaceX.API.Device.SignedData signed_request = 15;
+	.SpaceX.API.Device.RebootRequest reboot = 1001;
+	.SpaceX.API.Device.SpeedTestRequest speed_test = 1003;
+	.SpaceX.API.Device.GetStatusRequest get_status = 1004;
+	.SpaceX.API.Device.AuthenticateRequest authenticate = 1005;
+	.SpaceX.API.Device.GetNextIdRequest get_next_id = 1006;
+	.SpaceX.API.Device.GetHistoryRequest get_history = 1007;
+	.SpaceX.API.Device.GetDeviceInfoRequest get_device_info = 1008;
+	.SpaceX.API.Device.GetPingRequest get_ping = 1009;
+	.SpaceX.API.Device.SetTrustedKeysRequest set_trusted_keys = 1010;
+	.SpaceX.API.Device.FactoryResetRequest factory_reset = 1011;
+	.SpaceX.API.Device.GetLogRequest get_log = 1012;
+	.SpaceX.API.Device.SetSkuRequest set_sku = 1013;
+	.SpaceX.API.Device.DishStowRequest dish_stow = 2002;
+	.SpaceX.API.Device.WifiSetConfigRequest wifi_set_config = 3001;
+	.SpaceX.API.Device.WifiGetClientsRequest wifi_get_clients = 3002;
+	.SpaceX.API.Device.WifiSetupRequest wifi_setup = 3003;
+}
+
+message Response {
+	uint64 id = 1;
+	.SpaceX.API.Status.Status status = 2;
+	.SpaceX.API.Device.RebootResponse reboot = 1001;
+	.SpaceX.API.Device.SpeedTestResponse speed_test = 1003;
+	.SpaceX.API.Device.GetDeviceInfoResponse get_device_info = 1004;
+	.SpaceX.API.Device.GetNextIdResponse get_next_id = 1006;
+	.SpaceX.API.Device.GetPingResponse get_ping = 1009;
+	.SpaceX.API.Device.SetTrustedKeysResponse set_trusted_keys = 1010;
+	.SpaceX.API.Device.FactoryResetResponse factory_reset = 1011;
+	.SpaceX.API.Device.GetLogResponse get_log = 1012;
+	.SpaceX.API.Device.SetSkuResponse set_sku = 1013;
+	.SpaceX.API.Device.DishStowResponse dish_stow = 2002;
+	.SpaceX.API.Device.DishGetStatusResponse dish_get_status = 2004;
+	.SpaceX.API.Device.DishAuthenticateResponse dish_authenticate = 2005;
+	.SpaceX.API.Device.DishGetHistoryResponse dish_get_history = 2006;
+	.SpaceX.API.Device.WifiSetConfigResponse wifi_set_config = 3001;
+	.SpaceX.API.Device.WifiGetClientsResponse wifi_get_clients = 3002;
+	.SpaceX.API.Device.WifiSetupResponse wifi_setup = 3003;
+	.SpaceX.API.Device.WifiGetStatusResponse wifi_get_status = 3004;
+	.SpaceX.API.Device.WifiAuthenticateResponse wifi_authenticate = 3005;
+	.SpaceX.API.Device.WifiGetHistoryResponse wifi_get_history = 3006;
+}
+
+message Event {
+	.SpaceX.API.Device.WifiNewClientConnectedEvent wifi_new_client_connected = 3001;
+	.SpaceX.API.Device.WifiAccountBondingEvent wifi_account_bonding = 3002;
+}
+
+message FactoryResetRequest {
+}
+
+message FactoryResetResponse {
+}
+
+message GetHistoryRequest {
+}
+
+message GetLogRequest {
+}
+
+message GetLogResponse {
+	string syslog = 1;
+}
+
+message GetPingRequest {
+}
+
+message GetPingResponse {
+message ResultsEntry {
+	string key = 1;
+	.SpaceX.API.Device.PingResult value = 2;
+}
+
+	.SpaceX.API.Device.GetPingResponse.ResultsEntry results = 1;
+}
+
+message GetStatusRequest {
+}
+
+message RebootRequest {
+}
+
+message RebootResponse {
+}
+
+message SpeedTestRequest {
+}
+
+message SpeedTestResponse {
+	float download_bps = 1;
+	float upload_bps = 2;
+	float latency_s = 3;
+}
+
+message GetDeviceInfoRequest {
+}
+
+message GetDeviceInfoResponse {
+	.SpaceX.API.Device.DeviceInfo device_info = 1;
+}
+
+message SetTrustedKeysRequest {
+	.SpaceX.API.Device.PublicKey keys = 1;
+}
+
+message SetTrustedKeysResponse {
+}
+
+message SetSkuRequest {
+	string sku = 1;
+	string country_code = 2;
+	bool apply_country_code = 4;
+}
+
+message SetSkuResponse {
+}
+
+service Device {
+	rpc Stream(stream .SpaceX.API.Device.ToDevice) returns (stream .SpaceX.API.Device.FromDevice);
+	rpc Handle(.SpaceX.API.Device.Request) returns (.SpaceX.API.Device.Response);
+}

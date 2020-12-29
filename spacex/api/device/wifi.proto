@@ -1,0 +1,71 @@
+syntax = "proto3";
+package SpaceX.API.Device;
+option go_package = "spacex.com/api/device";
+import "spacex/api/device/common.proto";
+import "spacex/api/device/wifi_config.proto";
+
+message WifiSetConfigRequest {
+	.SpaceX.API.Device.WifiConfig wifi_config = 1;
+}
+
+message WifiSetConfigResponse {
+}
+
+message WifiGetClientsRequest {
+}
+
+message WifiGetClientsResponse {
+	.SpaceX.API.Device.WifiClient clients = 1;
+}
+
+message WifiGetHistoryResponse {
+	uint64 current = 1;
+	float ping_drop_rate = 1001;
+	float ping_latency_ms = 1002;
+}
+
+message WifiNewClientConnectedEvent {
+	.SpaceX.API.Device.WifiClient client = 1;
+}
+
+message WifiClient {
+	string name = 1;
+	string mac_address = 2;
+	string ip_address = 3;
+	float signal_strength = 4;
+}
+
+message WifiSetupRequest {
+	bool skip = 1;
+	string network_name = 2;
+	string network_password = 3;
+}
+
+message WifiSetupResponse {
+}
+
+message WifiGetStatusResponse {
+	bool captive_portal_enabled = 1;
+	.SpaceX.API.Device.WifiClient clients = 2;
+	.SpaceX.API.Device.DeviceInfo device_info = 3;
+	.SpaceX.API.Device.DeviceState device_state = 4;
+	string serial_number = 1001;
+	string sku = 1002;
+	string ipv4_wan_address = 1003;
+	float ping_drop_rate = 1004;
+	float ping_latency_ms = 1005;
+}
+
+message WifiAuthenticateRequest {
+	.SpaceX.API.Device.SignedData challenge = 1;
+}
+
+message WifiAuthenticateResponse {
+	.SpaceX.API.Device.ChallengeResponse wifi = 1;
+	.SpaceX.API.Device.ChallengeResponse dish = 2;
+}
+
+message WifiAccountBondingEvent {
+	string dish_id = 1;
+}
+

@@ -1,0 +1,55 @@
+syntax = "proto3";
+package SpaceX.API.Device;
+option go_package = "spacex.com/api/device";
+
+message DeviceInfo {
+	string id = 1;
+	string hardware_version = 2;
+	string software_version = 3;
+	string country_code = 4;
+}
+
+message DeviceState {
+	uint64 uptime_s = 1;
+}
+
+message SignedData {
+	bytes data = 1;
+	bytes signature = 2;
+}
+
+message GetNextIdRequest {
+}
+
+message GetNextIdResponse {
+	uint64 id = 1;
+	uint64 epoch_id = 2;
+}
+
+message PingTarget {
+	string service = 1;
+	string location = 2;
+	string address = 3;
+}
+
+message PingResult {
+	float dropRate = 1;
+	float latencyMs = 2;
+	.SpaceX.API.Device.PingTarget target = 3;
+}
+
+message BondingChallenge {
+	string dish_id = 1;
+	string wifi_id = 2;
+	bytes nonce = 3;
+}
+
+message AuthenticateRequest {
+	.SpaceX.API.Device.SignedData challenge = 1;
+}
+
+message ChallengeResponse {
+	bytes signature = 1;
+	bytes certificate_chain = 2;
+}
+

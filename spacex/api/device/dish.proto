@@ -1,0 +1,63 @@
+syntax = "proto3";
+package SpaceX.API.Device;
+option go_package = "spacex.com/api/device";
+import "spacex/api/device/common.proto";
+
+message DishStowRequest {
+}
+
+message DishStowResponse {
+}
+
+message DishGetHistoryResponse {
+	uint64 current = 1;
+	float pop_ping_drop_rate = 1001;
+	float pop_ping_latency_ms = 1002;
+	float downlink_throughput_bps = 1003;
+	float uplink_throughput_bps = 1004;
+	float snr = 1005;
+	bool scheduled = 1006;
+	bool obstructed = 1007;
+}
+
+message DishGetStatusResponse {
+	.SpaceX.API.Device.DeviceInfo device_info = 1;
+	.SpaceX.API.Device.DeviceState device_state = 2;
+	float snr = 1001;
+	float seconds_to_first_nonempty_slot = 1002;
+	float pop_ping_drop_rate = 1003;
+	.SpaceX.API.Device.DishObstructionStats obstruction_stats = 1004;
+	.SpaceX.API.Device.DishAlerts alerts = 1005;
+	.SpaceX.API.Device.DishState state = 1006;
+	float downlink_throughput_bps = 1007;
+	float uplink_throughput_bps = 1008;
+	float pop_ping_latency_ms = 1009;
+}
+
+message DishAlerts {
+	bool motors_stuck = 1;
+	bool thermal_shutdown = 2;
+	bool thermal_throttle = 3;
+	bool unexpected_location = 4;
+}
+
+message DishObstructionStats {
+	float fraction_obstructed = 1;
+	float wedge_fraction_obstructed = 2;
+	float wedge_abs_fraction_obstructed = 3;
+	float valid_s = 4;
+	bool currently_obstructed = 5;
+	float last_24h_obstructed_s = 1006;
+}
+
+message DishAuthenticateResponse {
+	.SpaceX.API.Device.ChallengeResponse dish = 2;
+}
+
+enum DishState {
+	UNKNOWN = 0;
+	CONNECTED = 1;
+	SEARCHING = 2;
+	BOOTING = 3;
+}
+
